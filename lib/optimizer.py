@@ -25,7 +25,7 @@ class SGD:
                 # Retrieve the current velocities for this layer
                 v = self.velocities[layer]
 
-                v['dW'] = self.momentum * v + self.learning_rate * layer.dW
+                v['dW'] = self.momentum * v['dW'] + self.learning_rate * layer.dW
                 layer.W = layer.W - v['dW']
 
                 v['db'] = self.momentum * v['db'] + self.learning_rate * layer.db

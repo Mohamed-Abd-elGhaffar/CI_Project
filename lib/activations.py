@@ -1,5 +1,5 @@
 import numpy as np
-from layers import Layer
+from .layers import Layer
 class ReLU(Layer):
     def forward(self,input):
         self.input = input

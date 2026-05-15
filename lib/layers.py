@@ -84,3 +84,28 @@ class Dense(Layer):
 
         grad_input = grad_output @ self.W.T            # (batch_size, input_size)
         return grad_input
+    
+    
+class Dropout(Layer):
+    """
+    Dropout layer: randomly sets input units to 0 with a frequency of `rate` 
+    at each step during training time, which helps prevent overfitting.
+    """
+    def __init__(self, rate=0.2):
+        self.rate = rate
+        self.mask = None
+        self.is_training = True # Dropout only happens during training!
+
+    def forward(self, input):
+        if not self.is_training:
+            return input # Do nothing during testing/evaluation
+            
+        # Create a mask of 1s and 0s. 
+        # np.random.binomial draws samples from a binomial distribution.
+        self.mask = np.random.binomial(1, 1 - self.rate, size=input.shape)
+        
+        # Apply the mask and scale up the survivors
+        return (input * self.mask) / (1 - self.rate)
+
+    def backward(self, grad_output):
+        return (grad_output * self.mask) / (1 - self.rate)
